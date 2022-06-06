@@ -124,7 +124,7 @@ async function print(ticket: Ticket) {
     {
       text: "",
       align: "CENTER",
-      cols: 3,
+      cols: 2,
     },
     {
       text: "Price",
@@ -134,12 +134,12 @@ async function print(ticket: Ticket) {
     {
       text: "",
       align: "CENTER",
-      cols: 3,
+      cols: 2,
     },
     {
       text: "Total",
       align: "LEFT",
-      cols: 5,
+      cols: 7,
     },
   ]);
 
