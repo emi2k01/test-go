@@ -190,30 +190,31 @@ async function print(ticket: Ticket) {
     {
       text: "",
       align: "CENTER",
-      cols: 2,
+      cols: 3,
     },
     {
       text: "Price",
       align: "RIGHT",
-      cols: 7,
+      cols: 8,
     },
     {
       text: "",
       align: "CENTER",
-      cols: 2,
+      cols: 3,
     },
     {
       text: "Total",
       align: "LEFT",
-      cols: 7,
+      cols: 8,
     },
   ]);
 
   printer.underline(false);
   for (const product of ticket.products) {
+    const itemCell = `${product.sku} ${product.title}`;
     printer.tableCustom([
       {
-        text: `${product.sku} ${product.title}`.substring(0, 14) + "...",
+        text: itemCell.substring(0, 17),
         align: "LEFT",
         cols: 19,
       },
@@ -235,12 +236,44 @@ async function print(ticket: Ticket) {
       {
         text: "",
         align: "CENTER",
-        cols: 2,
+        cols: 3,
       },
       {
         text: `$${product.price.toFixed(2)}`,
         align: "RIGHT",
-        cols: 7,
+        cols: 8,
+      },
+      {
+        text: "",
+        align: "CENTER",
+        cols: 3,
+      },
+      {
+        text: `$${product.total.toFixed(2)}`,
+        align: "LEFT",
+        cols: 8,
+      },
+    ]);
+    printer.tableCustom([
+      {
+        text: itemCell.substring(17, 34),
+        align: "LEFT",
+        cols: 19,
+      },
+      {
+        text: "",
+        align: "RIGHT",
+        cols: 3,
+      },
+      {
+        text: "",
+        align: "CENTER",
+        cols: 3,
+      },
+      {
+        text: "",
+        align: "RIGHT",
+        cols: 3,
       },
       {
         text: "",
@@ -248,9 +281,21 @@ async function print(ticket: Ticket) {
         cols: 2,
       },
       {
-        text: `$${product.total.toFixed(2)}`,
+        text: product.discount
+          ? `-$${(product.price * (product.discount / 100.0)).toFixed(2)}`
+          : "",
+        align: "RIGHT",
+        cols: 8,
+      },
+      {
+        text: "",
+        align: "CENTER",
+        cols: 3,
+      },
+      {
+        text: "",
         align: "LEFT",
-        cols: 7,
+        cols: 8,
       },
     ]);
   }
