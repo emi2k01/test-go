@@ -28,6 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.17.0",
+    "git-ct": "^0.0.10",
     "nodemon": "^2.0.16",
     "prettier": "2.6.2",
     "rimraf": "^3.0.2",

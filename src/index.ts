@@ -34,95 +34,31 @@ async function main() {
   });
   console.log(`Printer connected: ${await printer?.isPrinterConnected()}`);
 
-  // const port = Number.parseInt(
-  //   (await new Promise((resolve) => {
-  //     readline.question("Listen on port (4009): ", resolve);
-  //   })) || "4009"
-  // );
+  const port = Number.parseInt(
+    (await new Promise((resolve) => {
+      readline.question("Listen on port (4009): ", resolve);
+    })) || "4009"
+  );
 
-  // app.get(
-  //   "/",
-  //   async (
-  //     req: Request<Record<string, unknown>, Record<string, unknown>, Ticket>,
-  //     res
-  //   ) => {
-  //     const ticket = req.body;
-  //     try {
-  //       await print(ticket);
-  //       return res.status(200).send();
-  //     } catch (e) {
-  //       return res.status(500).send();
-  //     }
-  //   }
-  // );
+  app.post(
+    "/",
+    async (
+      req: Request<Record<string, unknown>, Record<string, unknown>, Ticket>,
+      res
+    ) => {
+      const ticket = req.body;
+      try {
+        await print(ticket);
+        return res.status(200).send();
+      } catch (e) {
+        return res.status(500).send();
+      }
+    }
+  );
 
-  // app.listen(port, () => {
-  //   console.log(`Listening on port ${port}`);
-  // })
-  print({
-    cashier: "Andres Mejias",
-    customer: "Emilio Gonzalez",
-    order: 1293,
-    payments: [
-      {
-        amount: 123.32,
-        method: "VISA",
-      },
-      {
-        amount: 91.4,
-        method: "CASH",
-      },
-    ],
-    products: [
-      {
-        price: 12.0,
-        qty: 4,
-        sku: "4532",
-        title: "Golden chain #12",
-        total: 12 * 4,
-        discount: 0,
-      },
-      {
-        price: 192.2,
-        qty: 16,
-        sku: "8972",
-        title: "Silver medal",
-        total: 192.2 * 16,
-        discount: 15,
-      },
-      {
-        price: 121.0,
-        qty: 1,
-        sku: "2315",
-        title: "Mother's day bracelet very long bracelet really",
-        total: 121,
-        discount: 5,
-      },
-      {
-        price: 124.0,
-        qty: 4,
-        sku: "4532",
-        title: "Golden chain #12",
-        total: 12 * 4,
-        discount: 0,
-      },
-      {
-        price: 2.0,
-        qty: 72,
-        sku: "4322",
-        title: "Gold pin",
-        total: 72 * 2,
-        discount: 10,
-      },
-    ],
-    store: "1",
-    subtotal: 401.34,
-    taxAmount: 23,
-    taxPercentage: 7,
-    total: 424.34,
-    totalDiscount: 20.32,
-    workstation: 1,
-  });
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  })
 }
 
 async function print(ticket: Ticket) {
@@ -170,42 +106,42 @@ async function print(ticket: Ticket) {
     {
       text: "Item #",
       align: "LEFT",
-      cols: 19,
+      cols: ticket.columns[0] || 19,
     },
     {
       text: "Qty",
       align: "RIGHT",
-      cols: 3,
+      cols: ticket.columns[1] || 3,
     },
     {
       text: "",
       align: "CENTER",
-      cols: 3,
+      cols: ticket.columns[2] || 3,
     },
     {
       text: "D%",
       align: "RIGHT",
-      cols: 3,
+      cols: ticket.columns[3] || 3,
     },
     {
       text: "",
       align: "CENTER",
-      cols: 3,
+      cols: ticket.columns[4] || 3,
     },
     {
       text: "Price",
       align: "RIGHT",
-      cols: 8,
+      cols: ticket.columns[5] || 8,
     },
     {
       text: "",
       align: "CENTER",
-      cols: 3,
+      cols: ticket.columns[6] || 3,
     },
     {
       text: "Total",
       align: "LEFT",
-      cols: 8,
+      cols: ticket.columns[7] || 8,
     },
   ]);
 
@@ -216,86 +152,86 @@ async function print(ticket: Ticket) {
       {
         text: itemCell.substring(0, 17),
         align: "LEFT",
-        cols: 19,
+        cols: ticket.columns[0] || 19,
       },
       {
         text: product.qty.toString(),
         align: "RIGHT",
-        cols: 3,
+        cols: ticket.columns[1] || 3,
       },
       {
         text: "",
         align: "CENTER",
-        cols: 3,
+        cols: ticket.columns[2] || 3,
       },
       {
         text: product.discount ? product.discount + "%" : "",
         align: "RIGHT",
-        cols: 3,
+        cols: ticket.columns[3] || 3,
       },
       {
         text: "",
         align: "CENTER",
-        cols: 3,
+        cols: ticket.columns[4] || 3,
       },
       {
         text: `$${product.price.toFixed(2)}`,
         align: "RIGHT",
-        cols: 8,
+        cols: ticket.columns[5] || 8,
       },
       {
         text: "",
         align: "CENTER",
-        cols: 3,
+        cols: ticket.columns[6] || 3,
       },
       {
         text: `$${product.total.toFixed(2)}`,
         align: "LEFT",
-        cols: 8,
+        cols: ticket.columns[7] || 8,
       },
     ]);
     printer.tableCustom([
       {
         text: itemCell.substring(17, 34),
         align: "LEFT",
-        cols: 19,
+        cols: ticket.columns[0] || 19,
       },
       {
         text: "",
         align: "RIGHT",
-        cols: 3,
+        cols: ticket.columns[1] || 3,
       },
       {
         text: "",
         align: "CENTER",
-        cols: 3,
+        cols: ticket.columns[2] || 3,
       },
       {
         text: "",
         align: "RIGHT",
-        cols: 3,
+        cols: ticket.columns[3] || 3,
       },
       {
         text: "",
         align: "CENTER",
-        cols: 2,
+        cols: ticket.columns[4] || 2,
       },
       {
         text: product.discount
           ? `-$${(product.price * (product.discount / 100.0)).toFixed(2)}`
           : "",
         align: "RIGHT",
-        cols: 8,
+        cols: ticket.columns[5] || 8,
       },
       {
         text: "",
         align: "CENTER",
-        cols: 3,
+        cols: ticket.columns[6] || 3,
       },
       {
         text: "",
         align: "LEFT",
-        cols: 8,
+        cols: ticket.columns[7] || 8,
       },
     ]);
   }

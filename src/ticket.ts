@@ -14,4 +14,5 @@ export default interface Ticket {
   taxAmount: number,
   total: number,
   totalDiscount: number,
+  columns: number[],
 }
