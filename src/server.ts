@@ -5,6 +5,7 @@ import {
 import printerDriver from "@thiagoelg/node-printer";
 import express, { Request } from "express";
 import AutoLaunch from "auto-launch";
+import cors from "cors";
 
 const launcher = new AutoLaunch({
   name: "native",
@@ -33,6 +34,7 @@ let printer: ThermalPrinter;
 export async function listen() {
   const app = express();
   app.use(express.json());
+  app.use(cors())
 
   const printerName = process.env.PRINTER || "auto";
   console.log("Looking for printer:", printerName);
