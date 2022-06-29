@@ -18,4 +18,8 @@ require = pseudoRequire;
 
 import { listen } from "./server";
 
-listen();
+try {
+  listen();
+} catch (e) {
+  console.log(e);
+}
