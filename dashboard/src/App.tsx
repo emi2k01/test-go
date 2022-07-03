@@ -3,9 +3,12 @@ import * as M from "@mantine/core";
 import { client } from "./api";
 import logoUrl from "@/img/gold-tree-logo.png";
 import { showNotification } from "@mantine/notifications";
+import { CheckForUpdatesButton } from "./components/CheckForUpdatesButton/CheckForUpdatesButton";
+import { useVersion } from "./hooks/useVersion";
 
 function App() {
   const [printers, setPrinters] = React.useState([]);
+  const { version } = useVersion();
   const [selectedPrinter, setSelectedPrinter] = React.useState<string | null>(
     null
   );
@@ -63,6 +66,10 @@ function App() {
           onChange={handlePrinterChange}
           size="xl"
         />
+      </M.Stack>
+      <M.Stack sx={{ position: "absolute", bottom: "2rem", left: "2rem" }}>
+        <M.Text>v{version}</M.Text>
+        <CheckForUpdatesButton />
       </M.Stack>
       <M.Text
         sx={{
